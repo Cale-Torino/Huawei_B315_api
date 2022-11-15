@@ -1,0 +1,49 @@
+
+Huwei_B315
+
+1
+api/user/challenge_login
+
+2
+api/user/authentication_login
+
+3
+api/user/state-login
+
+4
+api/user/login
+
+----------------------------
+
+var scram = CryptoJS.SCRAM();
+var firstNonce = scram.nonce().toString();
+var firstPostData = {
+    username: name,
+    firstnonce: firstNonce,
+    mode: RSA_LOGIN_MODE
+};
+var firstXml = object2xml('request', firstPostData);
+
+
+saveAjaxData
+object2xml
+CryptoJS.SCRAM()
+scram.nonce()
+----------------------------
+
+
+http://192.168.8.1/api/webserver/SesTokInfo
+
+
+http://192.168.8.1/api/user/authentication_login
+
+
+http://192.168.8.1/api/monitoring/status
+192.168.8.1
+
+
+http://192.168.8.1/api/device/basic_information
+
+http://192.168.8.1/api/user/state-login
+
+http://192.168.8.1/config/global/config.xml
