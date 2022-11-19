@@ -1,0 +1,250 @@
+
+
+http://192.168.8.1/api/user/state-login
+
+<body><response>
+<state>0</state>
+<username>admin</username>
+<password_type>4</password_type>
+<firstlogin>1</firstlogin>
+<extern_password_type>1</extern_password_type>
+<accounts_number>1</accounts_number>
+</response>
+</body>
+
+-------------------------------------
+
+http://192.168.8.1/api/webserver/SesTokInfo
+
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<sesinfo>SessionID=kWIHa9RCZxuE15JthUABHA4gMdgczghN7QWAB0QMGSRRytwo8SbT+l8r3KIJbOVuZ1cxZmyWVYbUwe9AQrZtjzJCUHQLbJATiSgYJKkavkPhmyXBOod7FNTv4erfNcDz</sesinfo>
+<tokinfo>oTtQOa/OH2tMCZJ5Sph+xOEyI7yyudDI</tokinfo>
+</response>
+
+
+-------------------------------------
+
+SessionID=kWIHa9RCZxuE15JthUABHA4gMdgczghN7QWAB0QMGSRRytwo8SbT+l8r3KIJbOVuZ1cxZmyWVYbUwe9AQrZtjzJCUHQLbJATiSgYJKkavkPhmyXBOod7FNTv4erfNcDz
+oTtQOa/OH2tMCZJ5Sph+xOEyI7yyudDI
+
+http://192.168.8.1/api/user/challenge_login
+
+PAYLOAD
+
+<?xml version="1.0" encoding="UTF-8"?><request><username>admin</username><firstnonce>922d68e116e0b0efd40e34a1f0fec264ad461513bd8bcdc038ed4a505c6dc9b2</firstnonce><mode>1</mode></request>
+
+HEADERS: 
+
+__RequestVerificationToken: kIvQ16Ih5iUSf89Ycdp7PCUcgI8Pj7QH
+
+Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTbF3xNH4vLFbX/nbDcM3l/DFcMf7FGh265/yixfj8xN4scFP0c796lQmphGY6mxYnyKU
+
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+
+RESPONCE:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<salt>736e6c65353035745a48346b7a6b594b4d4f534a4231717132494f644d306f00</salt>
+<iterations>100</iterations>
+<servernonce>bde7b68ace9cde355a5cba5205a0af223d0066c5362eaa1dbd156f6ca463445en8JaugYT0ifoJQYKK9JF6XVB4ugcAv53</servernonce>
+<modeselected>1</modeselected>
+</response>
+
+
+
+-------------------------------------
+
+http://192.168.8.1/api/user/authentication_login
+
+PAYLOAD
+<?xml version="1.0" encoding="UTF-8"?><request><clientproof>d49e7178b4fbce8f2c4229066cdb318b3439f9bfb5413fbd4d5d99a11297c3ab</clientproof><finalnonce>8b5a33a6023c7e8876a4a3ffba100f9d9c120ca1ad53b9166e6dfabeb7b228e9NA7h7hHL4FvGsq7g51ywV8vp1EJY3LyP</finalnonce></request>
+
+RESPONCE
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<serversignature>0f720130b6b5c3261268e3f76e2b054a61e25fa9da5b1b325fe119384c7e1604</serversignature>
+<rsapubkeysignature>50ab2855161903278d8a9476c06080237d83275fec653fceaec9253d6036a45d</rsapubkeysignature>
+<rsan>cbaf06e180a5ddd6f96af1a12fd34d9bffdbff23fdb0c03f7abcadb6b0aebc0995747ff783141b8a918ec2c738f6d66fbaae8d9a483bc64f04fab85f5e0fe8faffb83bc44149fd451329ecc9ba83ba3945d99df59eda0580cdc4b2b21d0d47f92a8d69c3bc2efa49de3adbf05876dfa6927daccd715cba752445189393dba78d867c1a15fc1665e85557d9d3b107e0b873e343df8a7c5000a819962adae661df77236ff587f69aafe5d95767c2f6fecd90b78b0fbc10e72c86c3d2fcd6211ccd8d96bea593bd086d5ae4d8f54b000a634e78ed24462f71535d0e7257e564927099e156ad8faada6c12532093680bb1d521a12df59c7ad5e697ad9d0bc0ab7c1d</rsan>
+<rsae>010001</rsae>
+</response>
+
+REQUESTED HEADERS
+POST /api/user/authentication_login HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: keep-alive
+Content-Length: 269
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Cookie: SessionID=NXnVKpnrn2VwS6qSaPmaVaKYTpRfOKfPwxUMRsV2whciG2XCDdZ7ADTOmgvEqcJE1QDrWdMefBHJM1nF14hW+XVUpqsPP76BrcZajpI2zWjQN4rHu6jt9ZhiF8VqqiGK
+Host: 192.168.8.1
+Origin: http://192.168.8.1
+Referer: http://192.168.8.1/html/home.html
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36
+X-Requested-With: XMLHttpRequest
+__RequestVerificationToken: y9JT09zfPzTAs8sTf11wbaWL65rPpIe+
+
+
+-------------------------------------
+
+http://192.168.8.1/api/user/state-login
+
+REQUESTED HEADERS
+
+GET /api/user/state-login HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: keep-alive
+Cookie: SessionID=VgfiQtZ38OWFdZF+3vABo1+hKekmMbnazqbdjtpoIlo8lZti/kdHTphxambKHtEqtG+/D7NCyGVrAH0nQl02S0RRiulC86ijZzAMgU79AVBhCNdHGC5tRi3Id7XR3lOa
+Host: 192.168.8.1
+Referer: http://192.168.8.1/html/home.html
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36
+X-Requested-With: XMLHttpRequest
+
+RESPONCE
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<State>0</State>
+<Username>admin</Username>
+<password_type>4</password_type>
+<firstlogin>1</firstlogin>
+<extern_password_type>1</extern_password_type>
+<accounts_number>1</accounts_number>
+</response>
+
+-------------------------------------
+
+url
+http://192.168.8.1/api/device/control
+
+REQUSEST HEADERS
+POST /api/device/control HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: keep-alive
+Content-Length: 77
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Cookie: SessionID=VgfiQtZ38OWFdZF+3vABo1+hKekmMbnazqbdjtpoIlo8lZti/kdHTphxambKHtEqtG+/D7NCyGVrAH0nQl02S0RRiulC86ijZzAMgU79AVBhCNdHGC5tRi3Id7XR3lOa
+Host: 192.168.8.1
+Origin: http://192.168.8.1
+Referer: http://192.168.8.1/html/reboot.html
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36
+X-Requested-With: XMLHttpRequest
+__RequestVerificationToken: YcreEzna/k2Dqd2ElNjiShjhE2A11vjQ
+
+
+payload
+<?xml version="1.0" encoding="UTF-8"?><request><Control>1</Control></request>
+
+responce
+<?xml version="1.0" encoding="UTF-8"?>
+<response>OK</response>
+
+
+-------------------------------------
+
+http://192.168.8.1/api/monitoring/status
+
+GET /api/monitoring/status HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cache-Control: max-age=0
+Connection: keep-alive
+Cookie: SessionID=qIEuAXEdA5G8QI9RChzA/ijF0ADZB57OaOaeCBQDYDBnlF25botOFSSCrAioR2Sk8LejcdFL0qtCJYYF98Pt9VOZ0DH9cdx2yp2SXY5SpB+QA7satW+tfThkwpz5wjTt
+Host: 192.168.8.1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<ConnectionStatus>901</ConnectionStatus>
+<WifiConnectionStatus></WifiConnectionStatus>
+<SignalStrength></SignalStrength>
+<SignalIcon>5</SignalIcon>
+<CurrentNetworkType>19</CurrentNetworkType>
+<CurrentServiceDomain>3</CurrentServiceDomain>
+<RoamingStatus>0</RoamingStatus>
+<BatteryStatus></BatteryStatus>
+<BatteryLevel></BatteryLevel>
+<BatteryPercent></BatteryPercent>
+<simlockStatus>0</simlockStatus>
+<PrimaryDns>41.216.200.5</PrimaryDns>
+<SecondaryDns>41.216.200.6</SecondaryDns>
+<PrimaryIPv6Dns></PrimaryIPv6Dns>
+<SecondaryIPv6Dns></SecondaryIPv6Dns>
+<CurrentWifiUser>2</CurrentWifiUser>
+<TotalWifiUser>32</TotalWifiUser>
+<currenttotalwifiuser>32</currenttotalwifiuser>
+<ServiceStatus>2</ServiceStatus>
+<SimStatus>1</SimStatus>
+<WifiStatus>1</WifiStatus>
+<CurrentNetworkTypeEx>101</CurrentNetworkTypeEx>
+<maxsignal>5</maxsignal>
+<wifiindooronly>0</wifiindooronly>
+<wififrequence>0</wififrequence>
+<classify>cpe</classify>
+<flymode>0</flymode>
+<cellroam>1</cellroam>
+<voice_busy>0</voice_busy>
+</response>
+
+-------------------------------------
+
+http://192.168.8.1/
+
+http://192.168.8.1/api/device/basic_information
+
+
+http://192.168.8.1/config/deviceinformation/config.xml
+
+
+/config/webuicfg/config.xml
+
+/api/monitoring/check-notifications
+
+/api/monitoring/status
+
+/api/cradle/status-info
+/api/online-update/autoupdate-config
+
+http://192.168.8.1/api/user/password_scram
+
+http://192.168.8.1/api/user/login
+
+-------------------------------------
+
+POST /api/host/info HTTP/1.1
+Host: 192.168.8.1
+Connection: keep-alive
+Content-Length: 529
+Accept: */*
+X-Requested-With: XMLHttpRequest
+__RequestVerificationToken: opL1rMbSitrLrC7vX6+fQHSBcM7zNXgO
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Origin: http://192.168.8.1
+Referer: http://192.168.8.1/html/home.html
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: SessionID=SPYQy/QwuKXP707Pua6ail5J/5c64OAb0YhpYuArXmdL7myG4l03ZWIoussWKv9cP5lwIKrZVIOsEEfO8IbnegsyNwWAWy1AVWkLELXeRvAzePcBnauGxEpghArnc/Df
+
+<?xml version="1.0" encoding="UTF-8"?><request><Time>20221119170702</Time><Timezone>GMT+02:00</Timezone><Platform>Win32</Platform><PlatformVer>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36</PlatformVer><Navigator>5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36</Navigator><NavigatorVer>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36</NavigatorVer></request>
+
+result
+
+<?xml version="1.0" encoding="UTF-8"?>
+<error>
+<code>100401</code>
+<message></message>
+</error>
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml version="1.0" encoding="UTF-8"?><request><Username>admin</Username><Password></Password><password_type>4</password_type></request>

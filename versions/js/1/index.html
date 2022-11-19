@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Reboot HuweiB315</title>
+<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+</head>
+<body>
+
+<h1>Reboot HuweiB315 Script</h1>
+<p>Enters credentials and reboots router</p>
+
+<script type="text/javascript" src="aes.js"></script>
+<script type="text/javascript" src="hmac-sha256.js"></script>
+<script type="text/javascript" src="pbkdf2.js"></script>
+<script type="text/javascript" src="scram.js"></script>
+<script>
+    var AJAX_HEADER = 'http://192.168.8.1/';
+    var AJAX_TAIL = '';
+    var AJAX_TIMEOUT = 30000;
+    var g_requestVerificationToken = [];
+    var g_base64EncodeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    var g_password_type = 4;
+
+function object2xml(name, obj) {
+    var xmlstr = '<?xml version="1.0" encoding="UTF-8"?>';
+    xmlstr += _recursiveObject2Xml(name, obj);
+    return xmlstr;
+}
+
+function _recursiveObject2Xml(name, obj) {
+    var xmlstr = '';
+    if (typeof(obj) == 'string' || typeof(obj) == 'number') {
+        xmlstr = _createNodeStr(name, obj);
+    } else if (jQuery.isArray(obj)) {
+        jQuery.each(obj, function(idx, item) {
+            xmlstr += _recursiveObject2Xml(name, item);
+        });
+    } else if (typeof(obj) == 'object') {
+        xmlstr += '<' + name + '>';
+        jQuery.each(obj, function(propName, propVal) {
+            xmlstr += _recursiveObject2Xml(propName, propVal);
+        });
+        xmlstr += '</' + name + '>';
+    }
+    return xmlstr;
+}
+
+function _createNodeStr(nodeName, nodeValue) {
+    return '<' + nodeName + '>' + nodeValue + '</' + nodeName + '>';
+}
+
+function getAjaxData(urlstr, callback_func, options) {
+    var myurl = AJAX_HEADER + urlstr + AJAX_TAIL;
+    var isAsync = true;
+    var nTimeout = AJAX_TIMEOUT;
+    var errorCallback = null;
+    if (options) {
+        if (options.sync) {
+            isAsync = (options.sync == true) ? false : true;
+        }
+        if (options.timeout) {
+            nTimeout = parseInt(options.timeout, 10);
+            if (isNaN(nTimeout)) {
+                nTimeout = AJAX_TIMEOUT;
+            }
+        }
+        errorCallback = options.errorCB;
+    }
+    var headers = {};
+    if (!($.isArray(g_requestVerificationToken))) {
+        headers['__RequestVerificationToken'] = g_requestVerificationToken;
+    }
+    if (true == g_scarm_login && (urlstr == 'api/wlan/multi-basic-settings' || urlstr == 'api/wlan/security-settings')) {
+        headers['Login-Type'] = 'Scram';
+    }
+    if (g_set_cookie_flag && urlstr == 'api/monitoring/status') {
+        g_set_cookie_flag = false;
+        headers['Update-Cookie'] = 'UpdateCookie';
+    }
+    $.ajax({
+        async: isAsync,
+        headers: headers,
+        type: 'GET',
+        timeout: nTimeout,
+        url: myurl,
+        error: function(XMLHttpRequest, textStatus) {
+            try {
+                if (jQuery.isFunction(errorCallback)) {
+                    errorCallback(XMLHttpRequest, textStatus);
+                }
+                log.error('MAIN : getAjaxData(' + myurl + ') error.');
+                log.error('MAIN : XMLHttpRequest.readyState = ' + XMLHttpRequest.readyState);
+                log.error('MAIN : XMLHttpRequest.status = ' + XMLHttpRequest.status);
+                log.error('MAIN : textStatus ' + textStatus);
+            } catch (exception) {
+                log.error(exception);
+            }
+        },
+        success: function(data) {
+            log.debug('MAIN : getAjaxData(' + myurl + ') sucess.');
+            log.trace(data);
+            var xml;
+            if (typeof data == 'string' || typeof data == 'number') {
+                if ((-1 != this.url.indexOf('/api/ussd/get')) && (-1 != data.indexOf("content"))) {
+                    data = smsContentDeleteWrongChar(data);
+                }
+                if (!window.ActiveXObject) {
+                    var parser = new DOMParser();
+                    xml = parser.parseFromString(data, 'text/xml');
+                } else {
+                    xml = new ActiveXObject('Microsoft.XMLDOM');
+                    xml.async = false;
+                    xml.loadXML(data);
+                }
+            } else {
+                xml = data;
+            }
+            var ret = xml2object($(xml));
+            if ('error' == ret.type) {
+                if (ERROR_WRONG_SESSION_TOKEN == ret.error.code) {
+                    log.error('Main: getajax' + this.url + 'session token error');
+                    gotoPageWithoutHistory(HOME_PAGE_URL);
+                    return;
+                }
+                if (ERROR_WRONG_SESSION == ret.error.code) {
+                    log.error('Main: getajax' + this.url + 'session  error');
+                    gotoPageWithoutHistory(HOME_PAGE_URL);
+                    return;
+                }
+            }
+            if ('error' == ret.type && ERROR_WRONG_TOKEN == ret.error.code) {
+                getAjaxToken();
+                getAjaxData(urlstr, callback_func, options);
+            } else if (typeof callback_func == 'function') {
+                callback_func($(xml));
+            } else {
+                log.error('callback_func is undefined or not a function');
+            }
+        }
+    });
+}
+
+function saveAjaxData(urlstr, xmlDate, callback_func, options) {
+    var myurl = AJAX_HEADER + urlstr + AJAX_TAIL;
+    console.log(myurl);
+    var isAsync = true;
+    var nTimeout = AJAX_TIMEOUT;
+    var errorCallback = null;
+    //var headers = {};
+    // if ($.isArray(g_requestVerificationToken)) {
+    //     if (g_requestVerificationToken.length > 0) {
+    //         headers['__RequestVerificationToken'] = g_requestVerificationToken[0];
+    //         g_requestVerificationToken.splice(0, 1);
+    //     } else {
+    //         setTimeout(function() {
+    //             saveAjaxData(urlstr, xmlDate, callback_func, options);
+    //         }, 50);
+    //         return;
+    //     }
+    // } else {
+    //     headers['__RequestVerificationToken'] = g_requestVerificationToken;
+    // }
+    // if (options) {
+    //     if (options.sync) {
+    //         isAsync = (options.sync == true) ? false : true;
+    //     }
+    //     if (options.timeout) {
+    //         nTimeout = parseInt(options.timeout, 10);
+    //         if (isNaN(nTimeout)) {
+    //             nTimeout = AJAX_TIMEOUT;
+    //         }
+    //     }
+    //     errorCallback = options.errorCB;
+        // if (options.enc && g_moduleswitch.encrypt_enabled == 1) {
+        //     headers['encrypt_transmit'] = 'encrypt_transmit';
+        //     xmlDate = doRSAEncrypt(xmlDate);
+        // } else if (options.enp && g_moduleswitch.encrypt_enabled == 1) {
+        //     headers['part_encrypt_transmit'] = options.enpstring;
+        // }
+        //headers['part_encrypt_transmit'] = options.enpstring;
+    //}
+    $.ajax({
+        async: isAsync,
+        // headers: {
+        // 'Authorization':'Basic xxxxxxxxxxxxx',
+        // 'X-CSRF-TOKEN':'xxxxxxxxxxxxxxxxxxxx',
+        // 'Content-Type':'application/json'
+        // },
+        type: 'POST',
+        timeout: nTimeout,
+        url: myurl,
+        data: xmlDate,
+        error: function(XMLHttpRequest, textStatus) {
+            try {
+                if ("12030" == XMLHttpRequest.status || "12031" == XMLHttpRequest.status || "12019" == XMLHttpRequest.status || "400" == XMLHttpRequest.status) {
+                    saveAjaxData(urlstr, xmlDate, callback_func, options);
+                    return;
+                } else if (jQuery.isFunction(errorCallback)) {
+                    errorCallback(XMLHttpRequest, textStatus);
+                }
+                console.log("MAIN : saveAjaxData(" + myurl + ") error.");
+                console.log("MAIN : XMLHttpRequest.readyState = " + XMLHttpRequest.readyState);
+                console.log("MAIN : XMLHttpRequest.status = " + XMLHttpRequest.status);
+                console.log("MAIN : textStatus" + textStatus);
+            } catch (exception) {
+                console.log(exception);
+            }
+        },
+        success: function(data) {
+            console.log("MAIN : saveAjaxData(" + myurl + ") success.");
+            console.log(data);
+            var xml;
+            if (typeof data == 'string') {
+                if (-1 != this.url.indexOf('/api/sms/sms-list') && -1 != data.indexOf('Messages')) {
+                    data = smsContentDeleteWrongChar(data);
+                }
+                if (!window.ActiveXObject) {
+                    var parser = new DOMParser();
+                    xml = parser.parseFromString(data, 'text/xml');
+                } else {
+                    xml = new ActiveXObject('Microsoft.XMLDOM');
+                    xml.async = false;
+                    xml.loadXML(data);
+                }
+            } else {
+                xml = data;
+            }
+            var xml_ret = xml2object($(xml));
+            if (typeof xml_ret.error != 'undefined' && -1 == this.url.indexOf('/api/user/session')) {
+                if (xml_ret.error.code == ERROR_SYSTEM_NO_RIGHTS && current_href != "home") {
+                    gotoPageWithoutHistory(HOME_PAGE_URL);
+                    return;
+                }
+                if (ERROR_VOICE_BUSY == xml_ret.error.code) {
+                    gotoPageWithoutHistory(VOICE_BUSY_URL);
+                    return;
+                }
+                if (ERROR_WRONG_TOKEN == xml_ret.error.code) {
+                    getAjaxToken();
+                    saveAjaxData(urlstr, xmlDate, callback_func, options);
+                    return;
+                }
+                if (ERROR_WRONG_SESSION_TOKEN == xml_ret.error.code) {
+                    console.log("Main: saveAjaxDate" + this.url + "session token error");
+                    gotoPageWithoutHistory(HOME_PAGE_URL);
+                    return;
+                }
+                if (ERROR_WRONG_SESSION == xml_ret.error.code) {
+                    console.log("Main: saveAjaxDate" + this.url + "session  error");
+                    gotoPageWithoutHistory(HOME_PAGE_URL);
+                    return;
+                }
+            } else if (isAjaxReturnOK(xml_ret) && -1 != this.url.indexOf('/api/user/login')) {
+                console.log("Main: login success, empty token list");
+                if ($.isArray(g_requestVerificationToken)) {
+                    g_requestVerificationToken = [];
+                }
+            } else if (-1 != this.url.indexOf('/api/user/challenge_login') || -1 != this.url.indexOf('/api/user/authentication_login') || -1 != this.url.indexOf('/api/user/password_scram')) {
+                if ($.isArray(g_requestVerificationToken)) {
+                    g_requestVerificationToken = [];
+                }
+            }
+            if (typeof callback_func == 'function') {
+                callback_func($(xml));
+            } else {
+                console.log("callback_func is undefined or not a function");
+            }
+        },
+        complete: function(XMLHttpRequest, textStatus) {
+            var headers = XMLHttpRequest.getAllResponseHeaders();
+            if (headers.indexOf('__RequestVerificationTokenone') >= 0) {
+                g_requestVerificationToken.push(getTokenFromHeader(headers, '__RequestVerificationTokenone'));
+                if (headers.indexOf('__RequestVerificationTokentwo') >= 0) {
+                    g_requestVerificationToken.push(getTokenFromHeader(headers, '__RequestVerificationTokentwo'));
+                }
+            } else if (headers.indexOf('__requestverificationtokenone') >= 0) {
+                g_requestVerificationToken.push(getTokenFromHeader(headers, '__requestverificationtokenone'));
+                if (headers.indexOf('__requestverificationtokentwo') >= 0) {
+                    g_requestVerificationToken.push(getTokenFromHeader(headers, '__requestverificationtokentwo'));
+                }
+            } else if (headers.indexOf('__RequestVerificationToken') >= 0) {
+                g_requestVerificationToken.push(getTokenFromHeader(headers, '__RequestVerificationToken'));
+            } else if (headers.indexOf('__requestverificationtoken') >= 0) {
+                g_requestVerificationToken.push(getTokenFromHeader(headers, '__requestverificationtoken'));
+            } else {
+                console.log("MAIN: saveAjaxData can not get response token");
+            }
+            //startLogoutTimer();
+        }
+    });
+}
+
+function base64encode(str) {
+    var out, i, len;
+    var c1, c2, c3;
+    len = str.length;
+    i = 0;
+    out = '';
+    while (i < len) {
+        c1 = str.charCodeAt(i++) & 0xff;
+        if (i == len) {
+            out += g_base64EncodeChars.charAt(c1 >> 2);
+            out += g_base64EncodeChars.charAt((c1 & 0x3) << 4);
+            out += '==';
+            break;
+        }
+        c2 = str.charCodeAt(i++);
+        if (i == len) {
+            out += g_base64EncodeChars.charAt(c1 >> 2);
+            out += g_base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+            out += g_base64EncodeChars.charAt((c2 & 0xF) << 2);
+            out += '=';
+            break;
+        }
+        c3 = str.charCodeAt(i++);
+        out += g_base64EncodeChars.charAt(c1 >> 2);
+        out += g_base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+        out += g_base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
+        out += g_base64EncodeChars.charAt(c3 & 0x3F);
+    }
+    return out;
+}
+
+  function login() {
+
+    var name = "admin";
+    var psd = "adminadmin";
+    var g_scarm_login = false;
+    var RSA_LOGIN_MODE = '1';
+
+    if (true == g_scarm_login) {
+        var scram = CryptoJS.SCRAM();
+        var firstNonce = scram.nonce().toString();
+        var firstPostData = {
+            username: name,
+            firstnonce: firstNonce,
+            mode: RSA_LOGIN_MODE
+        };
+        var firstXml = object2xml('request', firstPostData);
+        saveAjaxData('api/user/challenge_login', firstXml, function($xml) {
+            var ret = xml2object($xml);
+            if (ret.type == 'response') {
+                g_scarm_salt = CryptoJS.enc.Hex.parse(ret.response.salt);
+                var iter = ret.response.iterations;
+                var finalNonce = ret.response.servernonce;
+                var authMsg = firstNonce + "," + finalNonce + "," + finalNonce;
+                var saltPassword = scram.saltedPassword(psd, g_scarm_salt, iter);
+                saltPassword = saltPassword.toString();
+                var clientKey = scram.clientKey(CryptoJS.enc.Hex.parse(saltPassword));
+                clientKey = clientKey.toString();
+                var serverKey = scram.serverKey(CryptoJS.enc.Hex.parse(saltPassword));
+                serverKey = serverKey.toString();
+                var clientProof = scram.clientProof(psd, g_scarm_salt, iter, authMsg);
+                clientProof = clientProof.toString();
+                var finalPostData = {
+                    clientproof: clientProof,
+                    finalnonce: finalNonce
+                };
+                var finalXml = object2xml('request', finalPostData);
+                saveAjaxData('api/user/authentication_login', finalXml, function($xml) {
+                    ret = xml2object($xml);
+                    if (ret.type == 'response') {
+                        var serverProof = scram.serverProof(psd, g_scarm_salt, iter, authMsg);
+                        serverProof = serverProof.toString();
+                        if (ret.response.serversignature == serverProof) {
+                            var publicKey = ret.response.rsan;
+                            var publicKeySignature = scram.signature(CryptoJS.enc.Hex.parse(publicKey), CryptoJS.enc.Hex.parse(serverKey));
+                            publicKeySignature = publicKeySignature.toString();
+                            if (ret.response.rsapubkeysignature == publicKeySignature) {
+                                g_encPublickey.e = ret.response.rsae;
+                                g_encPublickey.n = ret.response.rsan;
+                                storagePubkey(g_encPublickey.n, g_encPublickey.e);
+                                getAjaxData('api/user/state-login', function($xml) {
+                                    //restartHeartBeatTimer();
+                                    var ret = xml2object($xml);
+                                    if (ret.type == 'response') {
+                                        if ('undefined' != typeof(ret.response.firstlogin)) {
+                                            g_default_password_status = parseInt(ret.response.firstlogin, 10);
+                                        }
+                                        g_login_state = ret.response.State;
+                                    }
+                                });
+                            } else {
+                                console.log("IDS_login_fialed_prompt");
+                            }
+                        } else {
+                            console.log("IDS_login_fialed_prompt");
+                        }
+                    } else {
+                        if (ret.error.code == ERROR_LOGIN_USERNAME_PWD_ORERRUN) {
+                            console.log("IDS_login_username_password_input_overrun");
+                        } else if (ret.error.code == ERROR_LOGIN_USERNAME_PWD_WRONG) {
+                            console.log("IDS_login_username_password_wrong");
+                        }
+                    }
+                });
+            } else {
+                if (ret.error.code == ERROR_LOGIN_USERNAME_PWD_ORERRUN) {
+                    console.log("IDS_login_username_password_input_overrun");
+                } else if (ret.error.code == ERROR_LOGIN_USERNAME_PWD_WRONG) {
+                    console.log("IDS_login_username_password_wrong");
+                } else if (ret.error.code == ERROR_LOGIN_ALREADY_LOGIN) {
+                    console.log("common_user_login_repeat");
+                }
+            }
+        });
+    } else {
+        if ($.isArray(g_requestVerificationToken)) {
+            console.log("test");
+            if (g_requestVerificationToken.length > 0) {
+                if (g_password_type == '4') {
+                    psd = base64encode(SHA256(name + base64encode(SHA256(psd)) + g_requestVerificationToken[0]));
+                    console.log("base64encode + SHA256");
+                } else {
+                    psd = base64encode(psd);
+                    console.log("base64encode");
+                }
+            } else {
+                //setTimeout(function() {
+                    //if (g_requestVerificationToken.length > 0) {
+                        //login(destnation, callback, redirectDes);
+                        //console.log("login request");
+                    //}
+                    console.log("test1");
+                    psd = base64encode(psd);
+                //}, 50)
+                //restartHeartBeatTimer();
+                //return;
+            }
+        } else {
+            psd = base64encode(psd);
+            console.log("base64encode only");
+        }
+        console.log("name="+name+"psd="+psd+"g_password_type="+g_password_type);
+        var request = {
+            Username: name,
+            Password: psd,
+            password_type: g_password_type
+        };
+            var xmlstr = object2xml('request', request);
+            console.log("object2xml request");
+            saveAjaxData('api/user/login', xmlstr, function($xml) {
+                console.log("api/user/login successed!");
+                //restartHeartBeatTimer();
+                var ret = xml2object($xml);
+                if (isAjaxReturnOK(ret)) {
+                  console.log("Hello isAjaxReturnOK");
+                } else {
+                    if (ret.type == 'error') {
+                        if (ret.error.code == ERROR_LOGIN_PASSWORD_WRONG) {
+                          console.log("system_hint_wrong_password");
+                        } else if (ret.error.code == ERROR_LOGIN_ALREADY_LOGIN) {
+                          console.log("common_user_login_repeat");
+                        } else if (ret.error.code == ERROR_LOGIN_USERNAME_WRONG) {
+                          console.log("settings_hint_user_name_not_exist");
+                        } else if (ret.error.code == ERROR_LOGIN_USERNAME_PWD_WRONG) {
+                          console.log("IDS_login_username_password_wrong");
+                        } else if (ret.error.code == ERROR_LOGIN_USERNAME_PWD_ORERRUN) {
+                          console.log("IDS_login_username_password_input_overrun");
+                        }
+                    }
+                }
+            }, {
+                enc: true
+            });
+    }
+}
+
+login();
+
+</script>
+</body>
+</html>
