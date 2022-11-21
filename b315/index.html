@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Reboot Huawei B315</title>
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- font-awesome -->
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<!-- jquery -->
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+<br>
+<div class="container-fluid">
+  <hr style="border-top: 1px solid red;">
+<div class="row">
+
+<h1 class="mx-auto" style="width: 600px;"><span style="color:grey">Reboot Huawei B315 </span>Script</h1>
+</div>
+
+<hr style="border-top: 1px solid red;">
+
+<div class="row">
+<div class="mx-auto" style="width: 600px;">
+<div class="bs-component">
+<div class="form-group">
+                  <br>
+                  <p>Enters credentials and reboots router: <a href="http://127.0.0.1/b315/index.html">http://127.0.0.1/b315/index.html</a></p>
+                  <p>This page runs in the local network where the router is operating.</p>
+                  <button id="btn" type="button" name="button" class="btn btn-primary btn-block">Login & reboot B315 router</button>
+                  <br>
+                  <div class="card border-primary mb-3" style="max-width: 600px;">
+                    <div class="card-header">Error Codes</div>
+                    <div class="card-body">
+                      <h4 class="card-title">B315 Router Error Codes</h4>
+                      <p class="card-text">Error codes I could find in the routers <code>main.js</code> file.</p>
+                      <p class="card-text" style="color:blue">ERROR_SYSTEM_NO_SUPPORT = 100002;</p>
+                      <p class="card-text" style="color:blue">ERROR_SYSTEM_NO_RIGHTS = "100003";</p>
+                      <p class="card-text" style="color:blue">ERROR_SYSTEM_BUSY = 100004;</p>
+                      <p class="card-text" style="color:blue">ERROR_LOGIN_USERNAME_WRONG = 108001;</p>
+                      <p class="card-text" style="color:blue">ERROR_LOGIN_PASSWORD_WRONG = 108002;</p>
+                      <p class="card-text" style="color:blue">ERROR_LOGIN_ALREADY_LOGIN = 108003;</p>
+                      <p class="card-text" style="color:blue">ERROR_LOGIN_USERNAME_PWD_WRONG = 108006;</p>
+                      <p class="card-text" style="color:blue">ERROR_LOGIN_USERNAME_PWD_ORERRUN = 108007;</p>
+                      <p class="card-text" style="color:blue">ERROR_VOICE_BUSY = 120001;</p>
+                      <p class="card-text" style="color:blue">ERROR_WRONG_TOKEN = 125001;</p>
+                      <p class="card-text" style="color:blue">ERROR_WRONG_SESSION = 125002;</p>
+                      <p class="card-text" style="color:blue">ERROR_WRONG_SESSION_TOKEN = 125003;</p>
+                    </div>
+                  </div>
+                  <p id="data" style="margin:10px;"></p>
+                  <br>
+                  <!-- <a href="tester.php" target="_blank" class="btn btn-primary btn-block">Testing Page</a> -->
+              </div>
+      </div>
+</div>
+
+</div>
+
+<hr style="border-top: 1px solid red;">
+
+<div class="row">
+<div class="mx-auto" style="width: 700px;">
+<div class="table-responsive">          
+<table class="table table-condensed table-hover">
+  <thead>
+    <tr>
+      <th id="cookie1">Cookie</th>
+      <th id="cookie2" style="color:blue">empty</th>
+    </tr>
+    <tr>
+      <th id="result1">Result</th>
+      <th id="result2" style="color:blue">empty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>Console log results are placed in the table above.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+
+<hr style="border-top: 1px solid red;">
+
+<script type="text/javascript" src="js/aes.js"></script>
+<script type="text/javascript" src="js/hmac-sha256.js"></script>
+<script type="text/javascript" src="js/pbkdf2.js"></script>
+<script type="text/javascript" src="js/scram.js"></script>
+<script type="text/javascript" src="js/sha256.js"></script>
+<script>
+$(document).ready(function(){
+$("#btn").click(function(){
+    var name = "admin";
+    var psd = "adminadmin";
+    var RSA_LOGIN_MODE = '1';
+    var cookie = "";
+    var tokinfo = "";
+    var scram = CryptoJS.SCRAM();
+        var firstNonce = scram.nonce().toString();
+        var xml = '<?xml version="1.0" encoding="UTF-8"?><request><username>'+name+'</username><firstnonce>'+firstNonce+'</firstnonce><mode>'+RSA_LOGIN_MODE+'</mode></request>';
+
+function base64_encode(s) {      
+    return btoa(unescape(encodeURIComponent(s)));
+}
+
+// function to handle error
+function error(err) {
+    console.log('Request Failed', err);
+    alert('Failed: ' + JSON.stringify(err));
+}
+
+function storagePubkey(rsa_n, rsa_e) {
+    var storage = window.localStorage;
+    if (rsa_e == "" || rsa_n == "") {
+        return;
+    }
+    try {
+        storage.setItem("atp", 'atp');
+        storage.getItem("atp");
+        storage.removeItem("atp");
+        storage.removeItem("n");
+        storage.removeItem("e");
+        storage.setItem("n", rsa_n);
+        storage.setItem("e", rsa_e);
+    } catch (error) {
+        var pubkey = "[rsa_n=" + rsa_n + "&rsa_e=" + rsa_e + "]";
+        var namebk = window.name;
+        var keylocation = namebk.indexOf("[rsa_n=");
+        var defaultvalue = namebk;
+        if (keylocation > 0) {
+            defaultvalue = namebk.substr(0, keylocation);
+        }
+        window.name = defaultvalue + pubkey;
+    }
+}
+
+function SesTokInfoSuccess(response) {
+  console.log('SesTokInfoSuccess: '+response);
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(response,"application/xml");
+  var values = [];
+  for (let nod of xmlDoc.querySelector('response').children)
+  {
+    values.push(nod.textContent);
+  }
+  cookie = base64_encode(values[0]);
+  tokinfo = base64_encode(values[1]);
+  //Login();
+  challengelogin(xml);
+}
+
+function SesTokInfo(){
+  var xhr = new XMLHttpRequest();
+  xhr.onerror = error;
+  xhr.open('GET', 'http://127.0.0.1/b315/curl.php?data=GET&url=http://192.168.8.1/api/webserver/SesTokInfo', false);
+  xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+        var response = xhr.responseText;
+        SesTokInfoSuccess(response);
+        }
+    }
+  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  xhr.send(null);
+}
+
+function stateloginSuccess(response) {
+  console.log('stateloginSuccess: ' + response);
+}
+
+function statelogin(){
+  var xhr = new XMLHttpRequest();
+  xhr.onerror = error;
+  xhr.open('GET', 'http://127.0.0.1/b315/curl.php?data=GET&url=http://192.168.8.1/api/user/state-login&cookie='+cookie, false);
+  xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+        var response = xhr.responseText;
+        stateloginSuccess(response);
+        }
+    }
+  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  xhr.send(null);
+}
+
+function challengeloginSuccess(response,Token) {
+  const mo = JSON.parse(Token);
+  console.log('RequestVerificationToken: '+Token);
+  tokinfo = base64_encode(mo.RequestVerificationToken);
+
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(response,"application/xml");
+  console.log('challengelogin: ' + response);
+  var values = [];
+  for (let nod of xmlDoc.querySelector('response').children)
+  {
+    values.push(nod.textContent);
+  }
+  //console.log(values[0]);
+  //console.log(values[1]);
+  //console.log(values[2]);
+   g_scarm_salt = CryptoJS.enc.Hex.parse(values[0]);
+   var iter = values[1];
+   var finalNonce = values[2];
+   var authMsg = firstNonce + "," + finalNonce + "," + finalNonce;
+   var saltPassword = scram.saltedPassword(psd, g_scarm_salt, iter);
+   saltPassword = saltPassword.toString();
+   var clientKey = scram.clientKey(CryptoJS.enc.Hex.parse(saltPassword));
+   clientKey = clientKey.toString();
+   var serverKey = scram.serverKey(CryptoJS.enc.Hex.parse(saltPassword));
+   serverKey = serverKey.toString();
+   var clientProof = scram.clientProof(psd, g_scarm_salt, iter, authMsg);
+   clientProof = clientProof.toString();
+   var x = '<?xml version="1.0" encoding="UTF-8"?><request><clientproof>'+clientProof+'</clientproof><finalnonce>'+finalNonce+'</finalnonce></request>';   
+   //refreshToken();
+   authenticationlogin(x, psd, g_scarm_salt, iter, authMsg, serverKey);
+}
+
+function challengelogin(xml){
+  //console.log('cookie='+cookie+'\n xml='+xml+'\n tokinfo='+tokinfo);
+  var xhr = new XMLHttpRequest();
+  xhr.onerror = error;
+  //http://127.0.0.1/b315/curl.php?data=POST&url=http://192.168.8.1/api/user/challenge_login&cookie='+cookie+'&postdata='+xml+'&tokinfo='+tokinfo
+  xhr.open('POST', 'http://127.0.0.1/b315/curl.php?data=POST&url=http://192.168.8.1/api/user/challenge_login&cookie='+cookie+'&postdata='+xml+'&tokinfo='+tokinfo, true);
+  xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+        var response = xhr.responseText;
+        //var Cookie = xhr.getResponseHeader("SetCookie");
+        var Token = xhr.getResponseHeader("RequestVerificationToken");
+        //var contentType =xhr.getAllResponseHeaders();
+        challengeloginSuccess(response,Token);
+        }
+    }
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+  xhr.send(null);
+}
+
+function authenticationloginSuccess(response, psd, g_scarm_salt, iter, authMsg, serverKey, Token, SetCookie) {
+  const mo = JSON.parse(Token);
+  tokinfo = base64_encode(mo.RequestVerificationToken);
+  console.log('RequestVerificationToken: '+tokinfo);
+  const moc = JSON.parse(SetCookie);
+  cookie = base64_encode(moc.SetCookie);
+  console.log('SetCookie: '+cookie);
+
+  console.log('authenticationlogin: ' + response);
+  //console.log('contentType: ' + contentType);
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(response,"application/xml");
+  var values = [];
+  for (let nod of xmlDoc.querySelector('response').children)
+  {
+    values.push(nod.textContent);
+  }
+  var serversignature = values[0];
+  var rsapubkeysignature = values[1];
+  var rsan = values[2];
+  var rsae = values[3];
+  if (values[0]) {
+    var serverProof = scram.serverProof(psd, g_scarm_salt, iter, authMsg);
+    serverProof = serverProof.toString();
+    if (serversignature == serverProof) {
+        var publicKey = rsan;
+        var publicKeySignature = scram.signature(CryptoJS.enc.Hex.parse(publicKey), CryptoJS.enc.Hex.parse(serverKey));
+        publicKeySignature = publicKeySignature.toString();
+        if (rsapubkeysignature == publicKeySignature) {
+          //storagePubkey(rsan, rsae);
+          //refreshToken();
+          //Ajaxtoken();
+          statelogin();
+          Login();
+          //control();
+            //g_encPublickey.e = rsae;
+            //g_encPublickey.n = rsan;
+            //storagePubkey(g_encPublickey.n, g_encPublickey.e);
+            //getAjaxData('api/user/state-login', function($xml) {
+                //restartHeartBeatTimer();
+                //var ret = xml2object($xml);
+                //if (ret.type == 'response') {
+                    //if ('undefined' != typeof(firstlogin)) {
+                        //g_default_password_status = parseInt(firstlogin, 10);
+                    //}
+                    //g_login_state = ret.response.State;
+                //}
+            //});
+        } else {
+            console.log("IDS_login_fialed_prompt");
+        }
+    } else {
+        console.log("IDS_login_fialed_prompt");
+    }
+} else 
+{
+  console.log("IDS_login_username_password_input_overrun");
+}
+}
+
+function authenticationlogin(x, psd, g_scarm_salt, iter, authMsg, serverKey){
+  var xhr = new XMLHttpRequest();
+  xhr.onerror = error;
+  xhr.open('POST', 'http://127.0.0.1/b315/curl.php?data=POST&url=http://192.168.8.1/api/user/authentication_login&cookie='+cookie+'&postdata='+x+'&tokinfo='+tokinfo, true);
+  xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+        //if (xhr.readyState === xhr.HEADERS_RECEIVED) {
+        //var contentType = xhr.getResponseHeader("Content-Type");
+        //var contentType =xhr.getAllResponseHeaders();
+        var response = xhr.responseText;
+        var SetCookie = xhr.getResponseHeader("SetCookie");
+        var Token = xhr.getResponseHeader("RequestVerificationToken");
+        authenticationloginSuccess(response, psd, g_scarm_salt, iter, authMsg, serverKey, Token, SetCookie);
+        //if (contentType !== my_expected_type) {
+          //xhr.abort();
+        //}
+      //}
+        }
+    }
+  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  xhr.send(null);
+}
+
+function controlSuccess(response) {
+  console.log('controlSuccess: ' + response);
+}
+
+function control(){
+  var postdata = '<?xml version="1.0" encoding="UTF-8"?><request><Control>1</Control></request>';
+  var xhr = new XMLHttpRequest();
+  xhr.onerror = error;
+  xhr.open('POST', 'http://127.0.0.1/b315/curl.php?data=POST&url=http://192.168.8.1/api/device/control&cookie='+cookie+'&postdata='+postdata+'&tokinfo='+tokinfo, true);
+  xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+        var response = xhr.responseText;
+        controlSuccess(response);
+        }
+    }
+  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');//application/x-www-form-urlencoded;charset=UTF-8
+  xhr.send(null);
+}
+
+SesTokInfo();
+
+});
+
+console.log("Ready");
+});
+
+</script>
+</body>
+</html>

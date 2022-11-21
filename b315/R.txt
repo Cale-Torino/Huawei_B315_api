@@ -248,3 +248,10 @@ result
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?xml version="1.0" encoding="UTF-8"?><request><Username>admin</Username><Password></Password><password_type>4</password_type></request>
+
+
+
+
+
+api/webserver/token
+
