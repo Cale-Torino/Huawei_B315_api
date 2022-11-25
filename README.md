@@ -28,8 +28,11 @@ These endpoints all run on the localhost `192.168.8.1` as an example.
 - Index
 - Usage Examples
 - Endpoint API Calls
-    - SesTokInfo
-    - state-login
+    - /api/webserver/SesTokInfo
+    - /api/user/state-login
+    - /api/user/challenge_login
+    - /api/user/authentication_login
+    - /api/device/control
 
 # Usage Examples
 
