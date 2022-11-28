@@ -34,6 +34,45 @@ These endpoints all run on the localhost `192.168.8.1` as an example.
     - /api/user/authentication_login
     - /api/device/control
 
+- GET /api/global/module-switch
+- GET /api/wlan/wifi-feature-switch
+- GET /api/device/usb-tethering-switch
+- GET /config/pcassistant/config.xml
+- GET /config/global/languagelist.xml
+- GET /api/monitoring/converged-status
+- GET /api/user/white_list_switch
+- POST /api/app/privacynoticeinfo (application/x-www-form-urlencoded)
+- GET /api/webserver/publickey
+- GET /config/deviceinformation/config.xml
+- GET /config/webuicfg/config.xml
+- GET /api/user/state-login
+- GET /api/pin/status
+- GET /api/monitoring/status
+- GET /api/online-update/autoupdate-config
+- POST /api/host/info (application/x-www-form-urlencoded)
+- GET /api/wlan/basic-settings
+- GET /api/dialup/mobile-dataswitch
+- GET /api/redirection/homepage
+- GET /api/net/current-plmn
+- GET /api/monitoring/traffic-statistics
+- GET /api/webserver/SesTokInfo
+- POST /api/user/challenge_login (application/x-www-form-urlencoded)
+- POST /api/user/authentication_login (application/x-www-form-urle
+- GET /api/user/state-login
+- GET /api/webserver/token
+- GET /api/dhcp/settings
+- GET /config/global/config.xml
+- GET /config/lan/config.xml
+- GET /api/user/state-login
+- GET /config/global/config.xml
+- GET /api/global/module-switch
+- GET /api/cradle/status-info
+- GET /api/pin/status
+- GET /api/pin/simlock
+- GET /api/device/basic_information
+- GET /config/lan/config.xml
+- GET /html/home.html
+
 # Usage Examples
 
 
