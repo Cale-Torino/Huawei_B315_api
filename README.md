@@ -23,6 +23,45 @@ These endpoints all run on the localhost `192.168.8.1` as an example.
     - Automated logging (monitor specifics in your DIY script)
     - Send data to an endpoint that reaches out to the internet (reboot over internet securely)
 
+Challenge_login post xml data:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+<username>admin</username>
+<firstnonce>sdfgdsfgvcb54356yth687765jhgf</firstnonce>
+<mode>4</mode>
+</request>
+```
+
+Authentication_login post xml data:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+<clientproof>2134rtfegfdsgesr</clientproof>
+<finalnonce>45645tgdfshgdfhdgfhghgfdh</finalnonce>
+</request>
+```
+
+Control post xml data:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+<Control>1</Control>
+</request>
+```
+
+Logout post xml data:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+<Logout>1</Logout>
+</request>
+```
+
 # Index
 - Summary
 - Index
