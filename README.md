@@ -119,7 +119,135 @@ Logout post xml data:
 # Usage Examples
 
 ```PHP
-//code
+
+/**
+ * curl.php
+ *
+ * Send POST & GET requests via cURL
+ *
+ * @category   cURL requests
+ * @package    cURL
+ * @author     C.A Torino
+ * @version    V1.0.0
+ * @since      2022 November 21
+ **/
+
+$data = filter_input(INPUT_GET, 'data', FILTER_SANITIZE_URL);
+$data = urldecode($data);
+
+$url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL);
+$url = urldecode($url);
+
+$postdata = filter_input(INPUT_GET, 'postdata', FILTER_SANITIZE_URL);
+$postdata = urldecode($postdata);
+
+$cookie = filter_input(INPUT_GET, 'cookie');
+$cookie = base64_decode($cookie);
+
+$tokinfo = filter_input(INPUT_GET, 'tokinfo');
+$tokinfo = base64_decode($tokinfo);
+
+$header1 = array();
+$header2 = array();
+
+if($data == "POST")
+{
+    cURLPOST($url,$postdata,$cookie,$tokinfo); 
+}
+else if($data == "GET")
+{
+    cURLGET($url,$cookie);
+}
+else
+{
+    echo json_encode(array(
+        "Error" => "1",
+        "Message" => "No request provided"
+      ));
+}
+
+function HandleHeaderLine($curl, $headerLine)
+{
+  global $header1;
+  global $header2;
+  if (preg_match('/^Set-Cookie:\s*([^;]*)/mi', $headerLine, $c) == 1)
+  {
+    $header1["SetCookie"] = $c[1];
+  }
+  if (preg_match('/^__RequestVerificationToken:\s*([^;]*)/mi', $headerLine, $c) == 1)
+  {
+    $header2["RequestVerificationToken"] = $c[1];
+  }
+  return strlen($headerLine);
+}
+
+function cURLGET($url,$cookie){
+  $curl = curl_init();
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_COOKIE => $cookie,
+    CURLOPT_TIMEOUT => 0,
+    //CURLOPT_HEADERFUNCTION => "HandleHeaderLine",
+    CURLOPT_FOLLOWLOCATION => false,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "GET",
+    CURLOPT_HTTPHEADER => array(
+      "Content-Type: application/x-www-form-urlencoded;charset=UTF-8"
+    ),
+  ));
+  
+  $response = curl_exec($curl);
+  
+  curl_close($curl);
+  echo $response;
+}
+
+function cURLPOST($url,$postdata,$cookie,$tokinfo){
+  global $header1;
+  global $header2;
+
+$curl = curl_init();
+//$postdata = json_encode($data);
+curl_setopt_array($curl, array(
+  CURLOPT_URL => $url,
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_COOKIE => $cookie,
+  CURLOPT_POSTFIELDS => $postdata,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_HEADERFUNCTION => "HandleHeaderLine",
+  CURLOPT_FOLLOWLOCATION => false,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_HTTPHEADER => array(
+    "Content-Type: application/x-www-form-urlencoded;charset=UTF-8",
+    "__RequestVerificationToken: $tokinfo"
+  ),
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+
+if($header1)
+{
+  $string = preg_replace('~[\r\n]+~', '', $header1);
+  $j = json_encode($string);
+  header("SetCookie: $j");
+}
+if($header2)
+{
+  $string = preg_replace('~[\r\n]+~', '', $header2);
+  $j = json_encode($string);
+  header("RequestVerificationToken: $j");
+}
+echo $response;
+}
+
 ```
 
 
