@@ -23,6 +23,8 @@ These endpoints all run on the localhost `192.168.8.1` as an example.
     - Automated logging (monitor specifics in your DIY script)
     - Send data to an endpoint that reaches out to the internet (reboot over internet securely)
 
+  # XML data
+
 Challenge_login post xml data:
 
 ```xml
@@ -64,6 +66,7 @@ Logout post xml data:
 
 # Index
 - Summary
+- XML data
 - Index
 - Usage Examples
 - Endpoint API Calls
