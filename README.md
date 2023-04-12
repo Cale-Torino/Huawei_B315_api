@@ -262,6 +262,63 @@ echo $response;
 
 -------------------
 
+### XML Parameters (Input)
+
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`username`      |admin |
+|`firstnonce`      |sdfgdsfgvcb54356yth687765jhgf |
+|`mode`      |4 |
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+<username>admin</username>
+<firstnonce>sdfgdsfgvcb54356yth687765jhgf</firstnonce>
+<mode>4</mode>
+</request>
+```
+
+### Interface Address
+
+http://192.168.8.1/api/webserver/SesTokInfo
+
+### Request Method
+
+- HTTP 
+- `GET`
+
+### Response Parameters (Output)
+| Parameter  |  Mode  | Description  | example values  |
+| :------------ | :------------ | :------------ | :------------ |
+|`null`            |string      |Https        |Cape Town                   |
+|`null`            |string      |Https        |1                           |
+|`null`            |string      |Https        |null   |
+|`null`            |string      |Https        |null   |
+
+### Example:
+
+- Returned data: 
+   - data
+- Example: 
+   - data
+   - data
+
+### Response Result Example
+```JSON
+
+```
+
+---
+---
+---
+
+## 0. SesTokInfo
+
+``GET` SesTokInfo` [*`GET` the SesTokInfo of the router*]
+
+-------------------
+
 ### Calling Parameters (Input)
 | Parameter  |  Mode  | Description  | example values  |
 | :------------ | :------------ | :------------ | :------------ |
