@@ -266,10 +266,101 @@ echo $response;
 
 | Parameter  | example values  |
 | :------------ | :------------ |
+|`null`      |null |
+
+### Interface Address
+
+http://192.168.8.1/api/webserver/SesTokInfo
+
+### Request Method
+
+- HTTP 
+- `GET`
+
+### XML Parameters (Output)
+
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`sesinfo`      |SessionID=kWIHa9RCZxuE15JthUABHA4gMdgczghN7QWAB0QMGSRRytwo8SbT+l8r3KIJbOVuZ1cxZmyWVYbUwe9AQrZtjzJCUHQLbJATiSgYJKkavkPhmyXBOod7FNTv4erfNcDz |
+|`tokinfo`      |oTtQOa/OH2tMCZJ5Sph+xOEyI7yyudDI |
+
+### Response Result Example
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<sesinfo>SessionID=kWIHa9RCZxuE15JthUABHA4gMdgczghN7QWAB0QMGSRRytwo8SbT+l8r3KIJbOVuZ1cxZmyWVYbUwe9AQrZtjzJCUHQLbJATiSgYJKkavkPhmyXBOod7FNTv4erfNcDz</sesinfo>
+<tokinfo>oTtQOa/OH2tMCZJ5Sph+xOEyI7yyudDI</tokinfo>
+</response>
+```
+
+---
+---
+---
+
+## 2. state-login
+
+``GET` state-login` [*`GET` the state-login of the router*]
+
+-------------------
+
+### XML Parameters (Input)
+
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`null`      |null |
+
+### Interface Address
+
+http://192.168.8.1/api/user/state-login
+
+### Request Method
+
+- HTTP 
+- `GET`
+
+### XML Parameters (Output)
+
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`state`                |0 |
+|`username`             |admin |
+|`password_type`        |4 |
+|`firstlogin`           |1 |
+|`extern_password_type` |1 |
+|`accounts_number`      |1 |
+
+### Response Result Example
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<state>0</state>
+<username>admin</username>
+<password_type>4</password_type>
+<firstlogin>1</firstlogin>
+<extern_password_type>1</extern_password_type>
+<accounts_number>1</accounts_number>
+</response>
+```
+
+---
+---
+---
+
+## 3. challenge_login
+
+``POST` challenge_login` [*`POST` the challenge_login credentials of the router*]
+
+-------------------
+
+### XML Parameters (Input) (Payload)
+
+| Parameter  | example values  |
+| :------------ | :------------ |
 |`username`      |admin |
 |`firstnonce`      |sdfgdsfgvcb54356yth687765jhgf |
 |`mode`      |4 |
 
+### Input Example
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
@@ -281,32 +372,40 @@ echo $response;
 
 ### Interface Address
 
-http://192.168.8.1/api/webserver/SesTokInfo
+http://192.168.8.1/api/user/challenge_login
+
+### Headers
+```
+__RequestVerificationToken: kIvQ16Ih5iUSf89Ycdp7PCUcgI8Pj7QH
+
+Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTbF3xNH4vLFbX/nbDcM3l/DFcMf7FGh265/yixfj8xN4scFP0c796lQmphGY6mxYnyKU
+
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+```
 
 ### Request Method
 
 - HTTP 
-- `GET`
+- `POST`
 
 ### Response Parameters (Output)
-| Parameter  |  Mode  | Description  | example values  |
-| :------------ | :------------ | :------------ | :------------ |
-|`null`            |string      |Https        |Cape Town                   |
-|`null`            |string      |Https        |1                           |
-|`null`            |string      |Https        |null   |
-|`null`            |string      |Https        |null   |
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`salt`      |736e6c65353035745a48346b7a6b594b4d4f534a4231717132494f644d306f00 |
+|`iterations`      |100 |
+|`servernonce`      |bde7b68ace9cde355a5cba5205a0af223d0066c5362eaa1dbd156f6ca463445en8JaugYT0ifoJQYKK9JF6XVB4ugcAv53 |
+|`modeselected`      |1 |
 
-### Example:
-
-- Returned data: 
-   - data
-- Example: 
-   - data
-   - data
 
 ### Response Result Example
-```JSON
-
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<salt>736e6c65353035745a48346b7a6b594b4d4f534a4231717132494f644d306f00</salt>
+<iterations>100</iterations>
+<servernonce>bde7b68ace9cde355a5cba5205a0af223d0066c5362eaa1dbd156f6ca463445en8JaugYT0ifoJQYKK9JF6XVB4ugcAv53</servernonce>
+<modeselected>1</modeselected>
+</response>
 ```
 
 ---
@@ -324,6 +423,11 @@ http://192.168.8.1/api/webserver/SesTokInfo
 | :------------ | :------------ | :------------ | :------------ |
 |`NULL`      |NULL |NULL      |NULL |
 
+### Input Example
+```xml
+
+```
+
 ### Interface Address
 
 http://192.168.8.1/api/webserver/SesTokInfo
@@ -341,13 +445,6 @@ http://192.168.8.1/api/webserver/SesTokInfo
 |`null`            |string      |Https        |null   |
 |`null`            |string      |Https        |null   |
 
-### Example:
-
-- Returned data: 
-   - data
-- Example: 
-   - data
-   - data
 
 ### Response Result Example
 ```JSON
