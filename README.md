@@ -475,7 +475,7 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 ---
 ---
 
-## 0. SesTokInfo
+## 0. null
 
 ``POST` authentication_login` [*`POST` the authentication_login data*]
 
@@ -484,8 +484,8 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 ### XML Parameters (Input) (Payload)
 | Parameter  | example values  |
 | :------------ | :------------ |
-|`0`      |0 |
-|`0`      |0 |
+|`null`      |0null |
+|`null`      |null |
 
 ### Input Example
 ```xml
@@ -513,10 +513,10 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 ### Response Parameters (Output)
 | Parameter  | example values  |
 | :------------ | :------------ |
-|`0`      |0 |
-|`0`      |0 |
-|`0`      |0 |
-|`0`      |0 |
+|`null`      |null |
+|`null`      |null |
+|`null`      |null |
+|`null`      |null |
 
 ### Response Result Example
 ```XML
