@@ -258,7 +258,7 @@ echo $response;
 
 ## 1. SesTokInfo
 
-``GET` SesTokInfo` [*`GET` the SesTokInfo of the router*]
+`SesTokInfo` [*GET the SesTokInfo of the router*]
 
 -------------------
 
@@ -299,7 +299,7 @@ http://192.168.8.1/api/webserver/SesTokInfo
 
 ## 2. state-login
 
-``GET` state-login` [*`GET` the state-login of the router*]
+`state-login` [*GET the state-login of the router*]
 
 -------------------
 
@@ -348,7 +348,7 @@ http://192.168.8.1/api/user/state-login
 
 ## 3. challenge_login
 
-``POST` challenge_login` [*`POST` the challenge_login credentials of the router*]
+`challenge_login` [*POST the challenge_login credentials of the router*]
 
 -------------------
 
@@ -413,7 +413,7 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 
 ## 4. authentication_login
 
-``POST` authentication_login` [*`POST` the authentication_login data*]
+`authentication_login` [*POST the authentication_login data*]
 
 -------------------
 
@@ -477,7 +477,7 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 
 ## 0. null
 
-``POST` authentication_login` [*`POST` the authentication_login data*]
+`authentication_login` [*POST the authentication_login data*]
 
 -------------------
 
