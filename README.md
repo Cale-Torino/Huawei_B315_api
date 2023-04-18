@@ -418,9 +418,10 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 -------------------
 
 ### XML Parameters (Input) (Payload)
-| Parameter  |  Mode  | Description  | example values  |
-| :------------ | :------------ | :------------ | :------------ |
-|`NULL`      |NULL |NULL      |NULL |
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`clientproof`      |d49e7178b4fbce8f2c4229066cdb318b3439f9bfb5413fbd4d5d99a11297c3ab |
+|`finalnonce`      |8b5a33a6023c7e8876a4a3ffba100f9d9c120ca1ad53b9166e6dfabeb7b228e9NA7h7hHL4FvGsq7g51ywV8vp1EJY3LyP |
 
 ### Input Example
 ```xml
@@ -452,10 +453,11 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 ### Response Parameters (Output)
 | Parameter  | example values  |
 | :------------ | :------------ |
-|`salt`      |736e6c65353035745a48346b7a6b594b4d4f534a4231717132494f644d306f00 |
-|`iterations`      |100 |
-|`servernonce`      |bde7b68ace9cde355a5cba5205a0af223d0066c5362eaa1dbd156f6ca463445en8JaugYT0ifoJQYKK9JF6XVB4ugcAv53 |
-|`modeselected`      |1 |
+|`serversignature`      |0f720130b6b5c3261268e3f76e2b054a61e25fa9da5b1b325fe119384c7e1604 |
+|`rsapubkeysignature`      |50ab2855161903278d8a9476c06080237d83275fec653fceaec9253d6036a45d |
+|`rsan`      |cbaf06e180a5ddd6f96af1a12fd34d9bffdbff23fdb0c03f7abcadb6b0aebc0995747ff783141b8a918ec2c738f6d66fbaae8d9a483bc64f04fab85f5e0fe8faffb83bc44149fd451329ecc9ba83ba3945d99df59eda0580cdc4b2b21d0d47f92a8d69c3bc2efa49de3adbf05876dfa6927daccd715cba752445189393dba78d867c1a15fc1665e85557d9d3b107e0b873e343df8a7c5000a819962adae661df77236ff587f69aafe5d95767c2f6fecd90b78b0fbc10e72c86c3d2fcd6211ccd8d96bea593bd086d5ae4d8f54b000a634e78ed24462f71535d0e7257e564927099e156ad8faada6c12532093680bb1d521a12df59c7ad5e697ad9d0bc0ab7c1d |
+|`rsae`      |010001 |
+
 
 
 ### Response Result Example
@@ -475,14 +477,15 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 
 ## 0. SesTokInfo
 
-``GET` SesTokInfo` [*`GET` the SesTokInfo of the router*]
+``POST` authentication_login` [*`POST` the authentication_login data*]
 
 -------------------
 
-### Calling Parameters (Input)
-| Parameter  |  Mode  | Description  | example values  |
-| :------------ | :------------ | :------------ | :------------ |
-|`NULL`      |NULL |NULL      |NULL |
+### XML Parameters (Input) (Payload)
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`0`      |0 |
+|`0`      |0 |
 
 ### Input Example
 ```xml
@@ -491,24 +494,32 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 
 ### Interface Address
 
-http://192.168.8.1/api/webserver/SesTokInfo
+http://192.168.8.1/api/user/authentication_login
+
+### Headers
+```
+__RequestVerificationToken: kIvQ16Ih5iUSf89Ycdp7PCUcgI8Pj7QH
+
+Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTbF3xNH4vLFbX/nbDcM3l/DFcMf7FGh265/yixfj8xN4scFP0c796lQmphGY6mxYnyKU
+
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+```
 
 ### Request Method
 
 - HTTP 
-- `GET`
+- `POST`
 
 ### Response Parameters (Output)
-| Parameter  |  Mode  | Description  | example values  |
-| :------------ | :------------ | :------------ | :------------ |
-|`null`            |string      |Https        |Cape Town                   |
-|`null`            |string      |Https        |1                           |
-|`null`            |string      |Https        |null   |
-|`null`            |string      |Https        |null   |
-
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`0`      |0 |
+|`0`      |0 |
+|`0`      |0 |
+|`0`      |0 |
 
 ### Response Result Example
-```JSON
+```XML
 
 ```
 
