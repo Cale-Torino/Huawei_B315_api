@@ -475,6 +475,62 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 ---
 ---
 
+## 5. control
+
+`control` [*POST the control data*]
+
+-------------------
+
+### XML Parameters (Input) (Payload)
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`control`      |1 |
+
+### Input Example
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+<Control>1</Control>
+</request>
+```
+
+```
+reboot router = <Control>1</Control>
+```
+
+### Interface Address
+
+http://192.168.8.1/api/device/control
+
+### Headers
+```
+__RequestVerificationToken: kIvQ16Ih5iUSf89Ycdp7PCUcgI8Pj7QH
+
+Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTbF3xNH4vLFbX/nbDcM3l/DFcMf7FGh265/yixfj8xN4scFP0c796lQmphGY6mxYnyKU
+
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+```
+
+### Request Method
+
+- HTTP 
+- `POST`
+
+### Response Parameters (Output)
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`response`      |OK |
+
+### Response Result Example
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<response>OK</response>
+```
+
+---
+---
+---
+
 ## 0. null
 
 `authentication_login` [*POST the authentication_login data*]
