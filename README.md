@@ -78,6 +78,7 @@ Logout post xml data:
         - `POST` /api/device/control
     - List Of Endpoints:
         - GET
+            - `GET` /api/monitoring/status
             - `GET` /api/global/module-switch
             - `GET` /api/wlan/wifi-feature-switch
             - `GET` /api/device/usb-tethering-switch
@@ -90,7 +91,6 @@ Logout post xml data:
             - `GET` /config/webuicfg/config.xml
             - `GET` /api/user/state-login
             - `GET` /api/pin/status
-            - `GET` /api/monitoring/status
             - `GET` /api/online-update/autoupdate-config
             - `GET` /api/wlan/basic-settings
             - `GET` /api/dialup/mobile-dataswitch
@@ -525,6 +525,87 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 ```XML
 <?xml version="1.0" encoding="UTF-8"?>
 <response>OK</response>
+```
+
+---
+---
+---
+
+## 6. monitoring/status
+
+`monitoring/status` [*GET the monitoring/status data*]
+
+-------------------
+
+### XML Parameters (Input) (Payload)
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`null`      |0null |
+|`null`      |null |
+
+### Input Example
+```xml
+
+```
+
+### Interface Address
+
+http://192.168.8.1/api/monitoring/status
+
+### Headers
+```
+
+Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTbF3xNH4vLFbX/nbDcM3l/DFcMf7FGh265/yixfj8xN4scFP0c796lQmphGY6mxYnyKU
+
+```
+
+### Request Method
+
+- HTTP 
+- `GET`
+
+### Response Parameters (Output)
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`null`      |null |
+|`null`      |null |
+|`null`      |null |
+|`null`      |null |
+
+### Response Result Example
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+<ConnectionStatus>901</ConnectionStatus>
+<WifiConnectionStatus></WifiConnectionStatus>
+<SignalStrength></SignalStrength>
+<SignalIcon>5</SignalIcon>
+<CurrentNetworkType>19</CurrentNetworkType>
+<CurrentServiceDomain>3</CurrentServiceDomain>
+<RoamingStatus>0</RoamingStatus>
+<BatteryStatus></BatteryStatus>
+<BatteryLevel></BatteryLevel>
+<BatteryPercent></BatteryPercent>
+<simlockStatus>0</simlockStatus>
+<PrimaryDns>41.216.200.5</PrimaryDns>
+<SecondaryDns>41.216.200.6</SecondaryDns>
+<PrimaryIPv6Dns></PrimaryIPv6Dns>
+<SecondaryIPv6Dns></SecondaryIPv6Dns>
+<CurrentWifiUser>2</CurrentWifiUser>
+<TotalWifiUser>32</TotalWifiUser>
+<currenttotalwifiuser>32</currenttotalwifiuser>
+<ServiceStatus>2</ServiceStatus>
+<SimStatus>1</SimStatus>
+<WifiStatus>1</WifiStatus>
+<CurrentNetworkTypeEx>101</CurrentNetworkTypeEx>
+<maxsignal>5</maxsignal>
+<wifiindooronly>0</wifiindooronly>
+<wififrequence>0</wififrequence>
+<classify>cpe</classify>
+<flymode>0</flymode>
+<cellroam>1</cellroam>
+<voice_busy>0</voice_busy>
+</response>
 ```
 
 ---
