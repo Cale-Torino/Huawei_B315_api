@@ -76,6 +76,7 @@ Logout post xml data:
         - `POST` /api/user/challenge_login
         - `POST` /api/user/authentication_login
         - `POST` /api/device/control
+        - `POST` /api/host/info (application/x-www-form-urlencoded)
     - List Of Endpoints:
         - GET
             - `GET` /api/monitoring/status
@@ -114,7 +115,6 @@ Logout post xml data:
             - `GET` /html/home.html
         - POST
             - `POST` /api/app/privacynoticeinfo (application/x-www-form-urlencoded)
-            - `POST` /api/host/info (application/x-www-form-urlencoded)
             - `POST` /api/user/challenge_login (application/x-www-form-urlencoded)
             - `POST` /api/user/authentication_login (application/x-www-form-urlencoded)
 
@@ -611,6 +611,71 @@ Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTb
 ---
 ---
 ---
+
+## 7. null
+
+`info` [*POST the info data*]
+
+-------------------
+
+### XML Parameters (Input) (Payload)
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`null`      |0null |
+|`null`      |null |
+
+### Input Example
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+<Time>20221119170702</Time>
+<Timezone>GMT+02:00</Timezone>
+<Platform>Win32</Platform>
+<PlatformVer>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36</PlatformVer>
+<Navigator>5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36</Navigator>
+<NavigatorVer>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36</NavigatorVer>
+</request>
+```
+
+### Interface Address
+
+http://192.168.8.1/api/host/info
+
+### Headers
+```
+__RequestVerificationToken: kIvQ16Ih5iUSf89Ycdp7PCUcgI8Pj7QH
+
+Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTbF3xNH4vLFbX/nbDcM3l/DFcMf7FGh265/yixfj8xN4scFP0c796lQmphGY6mxYnyKU
+
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+```
+
+### Request Method
+
+- HTTP 
+- `POST`
+
+### Response Parameters (Output)
+| Parameter  | example values  |
+| :------------ | :------------ |
+|`null`      |null |
+|`null`      |null |
+|`null`      |null |
+|`null`      |null |
+
+### Response Result Example
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<error>
+<code>100401</code>
+<message></message>
+</error>
+```
+
+---
+---
+---
+
 
 ## 0. null
 
