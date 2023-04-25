@@ -621,8 +621,12 @@ Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTb
 ### XML Parameters (Input) (Payload)
 | Parameter  | example values  |
 | :------------ | :------------ |
-|`null`      |0null |
-|`null`      |null |
+|`Time`           |20221119170702 |
+|`Timezone`       |GMT+02:00 |
+|`Platform`       |Win32 |
+|`PlatformVer`    |Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 |
+|`Navigator`      |5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 |
+|`NavigatorVer`   |Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 |
 
 ### Input Example
 ```xml
