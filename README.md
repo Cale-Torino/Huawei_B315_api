@@ -662,10 +662,8 @@ Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 ### Response Parameters (Output)
 | Parameter  | example values  |
 | :------------ | :------------ |
-|`null`      |null |
-|`null`      |null |
-|`null`      |null |
-|`null`      |null |
+|`code`      |100401 |
+|`message`   |null |
 
 ### Response Result Example
 ```XML
