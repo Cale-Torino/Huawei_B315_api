@@ -567,10 +567,36 @@ Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTb
 ### Response Parameters (Output)
 | Parameter  | example values  |
 | :------------ | :------------ |
-|`null`      |null |
-|`null`      |null |
-|`null`      |null |
-|`null`      |null |
+|`ConnectionStatus`       |null |
+|`WifiConnectionStatus`   |null |
+|`SignalStrength`         |null |
+|`SignalIcon`             |null |
+|`CurrentNetworkType`     |null |
+|`CurrentServiceDomain`   |null |
+|`RoamingStatus`          |null |
+|`BatteryStatus`          |null |
+|`BatteryLevel`           |null |
+|`BatteryPercent`         |null |
+|`simlockStatus`          |null |
+|`PrimaryDns`             |null |
+|`SecondaryDns`           |null |
+|`PrimaryIPv6Dns`         |null |
+|`SecondaryIPv6Dns`       |null |
+|`CurrentWifiUser`        |null |
+|`TotalWifiUser`          |null |
+|`currenttotalwifiuser`   |null |
+|`ServiceStatus`          |null |
+|`SimStatus`              |null |
+|`WifiStatus`             |null |
+|`CurrentNetworkTypeEx`   |null |
+|`maxsignal`              |null |
+|`wifiindooronly`         |null |
+|`wififrequence`          |null |
+|`classify`               |null |
+|`flymode`                |null |
+|`cellroam`               |null |
+|`voice_busy`             |null |
+
 
 ### Response Result Example
 ```XML
