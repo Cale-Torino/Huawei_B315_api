@@ -567,35 +567,35 @@ Cookie: SessionID=FLGiHt9EoYxZ+kP9nV6Rb3T+jAq4/g0QpTZMkVEwaOseOYqtRJXa0bZKYOQaTb
 ### Response Parameters (Output)
 | Parameter  | example values  |
 | :------------ | :------------ |
-|`ConnectionStatus`       |null |
+|`ConnectionStatus`       |901 |
 |`WifiConnectionStatus`   |null |
 |`SignalStrength`         |null |
-|`SignalIcon`             |null |
-|`CurrentNetworkType`     |null |
-|`CurrentServiceDomain`   |null |
-|`RoamingStatus`          |null |
+|`SignalIcon`             |5 |
+|`CurrentNetworkType`     |19 |
+|`CurrentServiceDomain`   |3 |
+|`RoamingStatus`          |0 |
 |`BatteryStatus`          |null |
 |`BatteryLevel`           |null |
 |`BatteryPercent`         |null |
-|`simlockStatus`          |null |
-|`PrimaryDns`             |null |
-|`SecondaryDns`           |null |
+|`simlockStatus`          |0 |
+|`PrimaryDns`             |41.216.200.5 |
+|`SecondaryDns`           |41.216.200.6 |
 |`PrimaryIPv6Dns`         |null |
 |`SecondaryIPv6Dns`       |null |
-|`CurrentWifiUser`        |null |
-|`TotalWifiUser`          |null |
-|`currenttotalwifiuser`   |null |
-|`ServiceStatus`          |null |
-|`SimStatus`              |null |
-|`WifiStatus`             |null |
-|`CurrentNetworkTypeEx`   |null |
-|`maxsignal`              |null |
-|`wifiindooronly`         |null |
-|`wififrequence`          |null |
-|`classify`               |null |
-|`flymode`                |null |
-|`cellroam`               |null |
-|`voice_busy`             |null |
+|`CurrentWifiUser`        |2 |
+|`TotalWifiUser`          |32 |
+|`currenttotalwifiuser`   |32 |
+|`ServiceStatus`          |2 |
+|`SimStatus`              |1 |
+|`WifiStatus`             |1 |
+|`CurrentNetworkTypeEx`   |101 |
+|`maxsignal`              |5 |
+|`wifiindooronly`         |0 |
+|`wififrequence`          |0 |
+|`classify`               |cpe |
+|`flymode`                |0 |
+|`cellroam`               |1 |
+|`voice_busy`             |0 |
 
 
 ### Response Result Example
